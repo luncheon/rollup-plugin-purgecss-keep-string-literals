@@ -4,6 +4,25 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { PurgeCSS } from 'purgecss'
 
+const flatSet = <T>(iterable: Iterable<Iterable<T>>) => {
+  const set = new Set<T>()
+  for (const items of iterable) {
+    for (const item of items) {
+      set.add(item)
+    }
+  }
+  return set
+}
+
+const mapGetOrSet = <K, V>(map: Map<K, V>, key: K, generator: (key: K) => V) => {
+  let value = map.get(key)
+  if (!value) {
+    value = generator(key)
+    map.set(key, value)
+  }
+  return value
+}
+
 export default ({
   css,
   output,
@@ -17,16 +36,14 @@ export default ({
 }) => {
   const filter = createFilter(include, exclude)
   const purge = new PurgeCSS()
-  let tokens: Set<string>
+  const moduleTokensMap = new Map<string, Set<string>>()
   return {
     name: '@luncheon/rollup-plugin-purgecss-keep-string-literals' as const,
-    buildStart() {
-      tokens = new Set()
-    },
     transform(code: string, id: string) {
       if (!filter(id)) {
         return
       }
+      const tokens = mapGetOrSet(moduleTokensMap, id, () => new Set())
       for (const token of acorn.tokenizer(code, { ecmaVersion: 'latest' })) {
         if (token.type.label === 'string' || token.type.label === 'template') {
           for (const s of token.value.split(/\s+/)) {
@@ -39,7 +56,7 @@ export default ({
       const purged = await purge.purge({
         css,
         content: [],
-        safelist: [...tokens],
+        safelist: [...flatSet<string>(moduleTokensMap.values())],
         keyframes: true,
         variables: true,
       })

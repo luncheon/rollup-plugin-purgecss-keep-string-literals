@@ -7,7 +7,6 @@ declare const _default: ({ css, output, include, exclude, }: {
     exclude?: string | RegExp | readonly (string | RegExp)[] | null | undefined;
 }) => {
     name: "@luncheon/rollup-plugin-purgecss-keep-string-literals";
-    buildStart(): void;
     transform(code: string, id: string): void;
     generateBundle(): Promise<void>;
 };
