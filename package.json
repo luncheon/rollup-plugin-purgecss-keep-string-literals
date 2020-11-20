@@ -1,7 +1,7 @@
 {
   "name": "@luncheon/rollup-plugin-purgecss-keep-string-literals",
   "version": "0.0.0",
-  "description": "",
+  "description": "An experimental rollup plugin that removes the rest of the CSS, leaving only the selectors used in the string literals in the JavaScript source code.",
   "license": "WTFPL",
   "repository": "luncheon/rollup-plugin-purgecss-keep-string-literals",
   "main": "index.js",
@@ -11,7 +11,8 @@
     "index.d.ts"
   ],
   "scripts": {
-    "build": "tsc -p ."
+    "build": "tsc -p . && npm t",
+    "test": "cd test && npm t"
   },
   "prettier": {
     "printWidth": 140,

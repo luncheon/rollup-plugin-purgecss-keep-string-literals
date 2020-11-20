@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const pluginutils_1 = require("@rollup/pluginutils");
 const acorn = require("acorn");
 const fs = require("fs");
+const path = require("path");
 const purgecss_1 = require("purgecss");
 exports.default = ({ css, output, include, exclude, }) => {
     const filter = pluginutils_1.createFilter(include, exclude);
@@ -33,6 +34,7 @@ exports.default = ({ css, output, include, exclude, }) => {
                 keyframes: true,
                 variables: true,
             });
+            await fs.promises.mkdir(path.dirname(output), { recursive: true });
             await fs.promises.writeFile(output, purged[0].css, 'utf8');
         },
     };

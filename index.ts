@@ -1,6 +1,7 @@
 import { createFilter, FilterPattern } from '@rollup/pluginutils'
 import * as acorn from 'acorn'
 import * as fs from 'fs'
+import * as path from 'path'
 import { PurgeCSS } from 'purgecss'
 
 export default ({
@@ -42,6 +43,7 @@ export default ({
         keyframes: true,
         variables: true,
       })
+      await fs.promises.mkdir(path.dirname(output), { recursive: true })
       await fs.promises.writeFile(output, purged[0].css, 'utf8')
     },
   }
