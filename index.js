@@ -1,10 +1,12 @@
-import { createFilter } from '@rollup/pluginutils';
-import * as acorn from 'acorn';
-import * as fs from 'fs';
-import { PurgeCSS } from 'purgecss';
-export default ({ css, output, include, exclude, }) => {
-    const filter = createFilter(include, exclude);
-    const purge = new PurgeCSS();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const pluginutils_1 = require("@rollup/pluginutils");
+const acorn = require("acorn");
+const fs = require("fs");
+const purgecss_1 = require("purgecss");
+exports.default = ({ css, output, include, exclude, }) => {
+    const filter = pluginutils_1.createFilter(include, exclude);
+    const purge = new purgecss_1.PurgeCSS();
     let tokens;
     return {
         name: '@luncheon/rollup-plugin-purgecss-keep-string-literals',
